@@ -22,12 +22,12 @@ public class UsuarioRepository {
 		entityManager.persist(usuario);
 	}
 
-	public void atualizar(Long id, Usuario usuario) {
+	public Usuario atualizar(Long id, Usuario usuario) {
 		Usuario usuarioNovo = pesquisarId(id);
 		usuarioNovo.setEmail(usuario.getEmail());
 		usuarioNovo.setNome(usuario.getNome());
 		usuarioNovo.setSenha(usuario.getSenha());
-		entityManager.merge(usuarioNovo);
+		return entityManager.merge(usuarioNovo);
 	}
 
 	public Usuario pesquisarId(Long id) {

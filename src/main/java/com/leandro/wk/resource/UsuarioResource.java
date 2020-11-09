@@ -32,38 +32,43 @@ public class UsuarioResource {
 	@Path("/{id}")
 	@Produces(value = MediaType.APPLICATION_JSON)
 	public Response pesquisarId(@PathParam("id") Long id) {
-		return Response.ok(repository.pesquisarId(id)).build();
+		Usuario usuarioPesquisado = repository.pesquisarId(id);
+		if (usuarioPesquisado == null)
+			return Response.status(404).entity("Usuário não encontrado").type(MediaType.TEXT_PLAIN).build();
+		return Response.ok(usuarioPesquisado).build();
 	}
 
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(value = MediaType.APPLICATION_JSON)
 	public Response inserir(Usuario usuario) {
-
-		// TODO: melhorar esse tratamento de erro, apresentar motivo do erro para o
-		// usuario
 		try {
 			repository.inserir(usuario);
 			return Response.status(201).build();
 
 		} catch (Exception e) {
-			return Response.status(500).build();
+			return Response.status(400).entity("Erro ao inserir usuário").build();
 		}
 	}
 
 	@DELETE
 	@Path("/{id}")
-	@Consumes(value = { MediaType.APPLICATION_JSON })
+	@Consumes(value = MediaType.APPLICATION_JSON)
 	public Response deletar(@PathParam("id") Long id) {
+		if (repository.pesquisarId(id) == null)
+			return Response.status(404).entity("Usuário não encontrado, por isso não pode ser deletado").build();
 		repository.deletar(id);
-		return Response.status(202).build();
+		return Response.noContent().build();
 	}
 
 	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	public Response atualizar(@PathParam("id") Long id, Usuario usuario) {
-		repository.atualizar(id, usuario);
-		return Response.status(202).build();
+		if (repository.pesquisarId(id) == null)
+			return Response.status(404).entity("Usuário não encontrado, por isso não pode ser atualizado")
+					.type(MediaType.TEXT_PLAIN).build();
+		return Response.accepted(repository.atualizar(id, usuario)).build();
 	}
 
 }
