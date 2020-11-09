@@ -37,4 +37,10 @@ public class UsuarioRepository {
 	public void deletar(Long id) {
 		entityManager.remove(pesquisarId(id));
 	}
+
+	public Usuario login(String email, String senha) {
+		return entityManager
+				.createQuery("SELECT u FROM Usuario u where u.email = :pEmail AND u.senha = :pSenha", Usuario.class)
+				.setParameter("pEmail", email).setParameter("pSenha", senha).getSingleResult();
+	}
 }

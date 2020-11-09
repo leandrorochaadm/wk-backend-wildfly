@@ -9,6 +9,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -69,6 +70,16 @@ public class UsuarioResource {
 			return Response.status(404).entity("Usuário não encontrado, por isso não pode ser atualizado")
 					.type(MediaType.TEXT_PLAIN).build();
 		return Response.accepted(repository.atualizar(id, usuario)).build();
+	}
+
+	@GET
+	@Path("/login")
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public Response login(@QueryParam(value = "email") String email, @QueryParam(value = "senha") String senha) {
+		Usuario usuarioPesquisado = repository.login(email, senha);
+		if (usuarioPesquisado == null)
+			return Response.status(404).entity("Usuário não encontrado").type(MediaType.TEXT_PLAIN).build();
+		return Response.ok(usuarioPesquisado).build();
 	}
 
 }
