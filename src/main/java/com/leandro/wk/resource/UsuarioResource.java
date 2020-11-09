@@ -76,10 +76,13 @@ public class UsuarioResource {
 	@Path("/login")
 	@Produces(value = MediaType.APPLICATION_JSON)
 	public Response login(@QueryParam(value = "email") String email, @QueryParam(value = "senha") String senha) {
-		Usuario usuarioPesquisado = repository.login(email, senha);
-		if (usuarioPesquisado == null)
-			return Response.status(404).entity("Usuário não encontrado").type(MediaType.TEXT_PLAIN).build();
-		return Response.ok(usuarioPesquisado).build();
+		try {
+			Usuario usuarioPesquisado = repository.login(email, senha);
+			return Response.ok(usuarioPesquisado).build();
+		} catch (Exception e) {
+			return Response.status(204).entity("Usuário não encontrado").type(MediaType.TEXT_PLAIN).build();
+		}
+
 	}
 
 }
