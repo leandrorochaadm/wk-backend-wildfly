@@ -20,5 +20,7 @@ obs: Recomendamos instalar as mesmas versões que utilizamos nesse projeto.
 
 module add --name=com.mysql --resources="__caminho pro jar do Mysql__\mysql-connector-java-8.0.22.jar" --dependencies=javax.api,javax.transaction.api
 
-### Comando pra adcionar o DataSource
+### Comando pra adicionar o DataSource
+´´´
 /subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.cj.jdbc.MysqlXADataSource)
+´´´
